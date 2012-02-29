@@ -1,8 +1,12 @@
 package edu.umn.acm.minecraft.ldap;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Author: bunny
@@ -14,8 +18,22 @@ public class MinecraftLDAP extends JavaPlugin {
     private PlayerListener playerListener;
 
     public MinecraftLDAP() {
-        LdapAuthenticationSource ldapAuthenticationSource = new LdapAuthenticationSource();
+        this.playerListener = new PlayerListener();
+    }
+
+    @Override
+    public void onEnable() {
+        this.configureAuthSource();
+        this.playerListener.setServer(this.getServer());
+        this.playerListener.setAuthenticationSource(this.authenticationSource);
+
+        PluginManager pluginManager = this.getServer().getPluginManager();
+        pluginManager.registerEvents(this.playerListener, this);
+    }
+
+    private void configureAuthSource() {
         FileConfiguration config = this.getConfig();
+        LdapAuthenticationSource ldapAuthenticationSource = new LdapAuthenticationSource();
         ldapAuthenticationSource.setUrl(config.getString("ldap.url"));
         ldapAuthenticationSource.setBaseLdapPath(config.getString("ldap.base"));
         ldapAuthenticationSource.setUserAccountObjectClass(config.getString("ldap.user_class"));
@@ -24,16 +42,5 @@ public class MinecraftLDAP extends JavaPlugin {
             ldapAuthenticationSource.setUserFullnameFieldName(config.getString("ldap.fullname_field"));
         }
         this.authenticationSource = ldapAuthenticationSource;
-        this.playerListener = new PlayerListener();
-    }
-
-    @Override
-    public void onEnable() {
-        //TODO: Update auth source
-        this.playerListener.setServer(this.getServer());
-        this.playerListener.setAuthenticationSource(this.authenticationSource);
-
-        PluginManager pluginManager = this.getServer().getPluginManager();
-        pluginManager.registerEvents(this.playerListener, this);
     }
 }

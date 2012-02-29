@@ -1,0 +1,6 @@
+ldap:
+    url: ldap://hippogriff
+    base: ou=active,ou=users,ou=ns,dc=acm,dc=umn,dc=edu
+    uid_field: uid
+    fullname_field: cn
+    user_class: acmAccount
