@@ -41,6 +41,11 @@ public class MinecraftLDAP extends JavaPlugin {
         if (config.contains("ldap.fullname_field")) {
             ldapAuthenticationSource.setUserFullnameFieldName(config.getString("ldap.fullname_field"));
         }
+        try {
+            ldapAuthenticationSource.connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         this.authenticationSource = ldapAuthenticationSource;
     }
 }

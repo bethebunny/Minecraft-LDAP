@@ -59,13 +59,14 @@ public class PlayerListener implements Listener {
                 } else if (authenticationSource.authenticate(cmd[1], cmd[2])) {
                     authenticatedPlayers.add(player);
                     player.sendRawMessage("Login successful.");
-                    player.setDisplayName(cmd[1].substring(0, MAX_LIST_NAME_LENGTH));
-                    int maxlen = MAX_LIST_NAME_LENGTH - cmd[1].length() - 3;
+                    String name = (cmd[1].length() <= MAX_LIST_NAME_LENGTH) ? cmd[1] : cmd[1].substring(0, MAX_LIST_NAME_LENGTH);
+                    player.setDisplayName(name);
                     String playerFullname = authenticationSource.getFullName(cmd[1]);
+                    int maxlen = MAX_LIST_NAME_LENGTH - name.length() - 3;
                     if (maxlen <= 0 || playerFullname == null) {
-                        player.setPlayerListName(player.getDisplayName());
+                        player.setPlayerListName(name);
                     } else {
-                        player.setPlayerListName(String.format("%s <%s>", cmd[1], playerFullname.substring(0, maxlen)));
+                        player.setPlayerListName(String.format("%s <%s>", name, playerFullname.substring(0, maxlen)));
                     }
                 } else {
                     player.kickPlayer("Failed login");

@@ -21,17 +21,17 @@ public class LdapAuthenticationSource implements AuthenticationSource {
     private String userFullnameFieldName;
     private String userAccountObjectClass;
 
-    public LdapAuthenticationSource() {}
+    public LdapAuthenticationSource() {
+        this.contextSource = new LdapContextSource();
+    }
 
-    public LdapAuthenticationSource(String url, String ldapBase, String userIdFieldName, String userAccountObjectClass) {
+    public LdapAuthenticationSource(String url, String ldapBase, String userIdFieldName, String userAccountObjectClass) throws Exception {
         this.contextSource = new LdapContextSource();
         this.userAccountObjectClass = userAccountObjectClass;
         this.userIdFieldName = userIdFieldName;
         this.setUrl(url);
         this.setBaseLdapPath(ldapBase);
-        try {
-            this.connect();
-        } catch (Exception e) { }
+        this.connect();
     }
 
     public void setUrl(String url) {

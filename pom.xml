@@ -94,7 +94,7 @@
                 </executions>
                 <configuration>
                     <finalName>${artifactId}-${version}-withdeps</finalName>
-                    <minimizeJar>true</minimizeJar>
+                    <!--minimizeJar>true</minimizeJar-->
                     <artifactSet>
                         <excludes>
                             <exclude>org.bukkit:*</exclude>
